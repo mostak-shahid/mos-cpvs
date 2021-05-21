@@ -6,8 +6,8 @@ function mos_cpvs_settings_init() {
 	add_settings_section('mos_cpvs_section_dash_end', '', 'mos_cpvs_section_end_cb', 'mos_cpvs');
 	
 	add_settings_section('mos_cpvs_section_scripts_start', '', 'mos_cpvs_section_scripts_start_cb', 'mos_cpvs');
-	add_settings_field( 'field_jquery', __( 'JQuery', 'mos_cpvs' ), 'mos_cpvs_field_jquery_cb', 'mos_cpvs', 'mos_cpvs_section_scripts_start', [ 'label_for' => 'jquery', 'class' => 'mos_cpvs_row', 'mos_cpvs_custom_data' => 'custom', ] );
-	add_settings_field( 'field_bootstrap', __( 'Bootstrap', 'mos_cpvs' ), 'mos_cpvs_field_bootstrap_cb', 'mos_cpvs', 'mos_cpvs_section_scripts_start', [ 'label_for' => 'bootstrap', 'class' => 'mos_cpvs_row', 'mos_cpvs_custom_data' => 'custom', ] );
+	//add_settings_field( 'field_jquery', __( 'JQuery', 'mos_cpvs' ), 'mos_cpvs_field_jquery_cb', 'mos_cpvs', 'mos_cpvs_section_scripts_start', [ 'label_for' => 'jquery', 'class' => 'mos_cpvs_row', 'mos_cpvs_custom_data' => 'custom', ] );
+	//add_settings_field( 'field_bootstrap', __( 'Bootstrap', 'mos_cpvs' ), 'mos_cpvs_field_bootstrap_cb', 'mos_cpvs', 'mos_cpvs_section_scripts_start', [ 'label_for' => 'bootstrap', 'class' => 'mos_cpvs_row', 'mos_cpvs_custom_data' => 'custom', ] );
 	add_settings_section('mos_cpvs_section_scripts_end', '', 'mos_cpvs_section_end_cb', 'mos_cpvs');
 
 }
@@ -39,6 +39,12 @@ function mos_cpvs_section_dash_start_cb( $args ) {
 	?>
 	<div id="mos-cpvs-dashboard" class="tab-con <?php if($data['active_tab'] == 'dashboard') echo 'active';?>">
 		<?php //var_dump($mos_cpvs_options) ?>
+	<?php
+}
+function mos_cpvs_section_scripts_start_cb( $args ) {
+	$data = get_mos_cpvs_active_tab ();
+	?>
+	<div id="mos-cpvs-scripts" class="tab-con <?php if($data['active_tab'] == 'scripts') echo 'active';?>">
         <?php 
             global $wpdb;
             $allposts = $wpdb->get_results( "SELECT DISTINCT post_parent FROM {$wpdb->prefix}posts WHERE post_type='product_variation'");
@@ -64,30 +70,7 @@ function mos_cpvs_section_dash_start_cb( $args ) {
         ?>
 	<?php
 }
-function mos_cpvs_section_scripts_start_cb( $args ) {
-	$data = get_mos_cpvs_active_tab ();
-	?>
-	<div id="mos-cpvs-scripts" class="tab-con <?php if($data['active_tab'] == 'scripts') echo 'active';?>">
-	<?php
-}
-function mos_cpvs_field_jquery_cb( $args ) {
-	global $mos_cpvs_options;
-	?>
-	<label for="<?php echo esc_attr( $args['label_for'] ); ?>"><input name="mos_cpvs_options[<?php echo esc_attr( $args['label_for'] ); ?>]" type="checkbox" id="<?php echo esc_attr( $args['label_for'] ); ?>" value="1" <?php echo isset( $mos_cpvs_options[ $args['label_for'] ] ) ? ( checked( $mos_cpvs_options[ $args['label_for'] ], 1, false ) ) : ( '' ); ?>><?php esc_html_e( 'Yes I like to add JQuery from Plugin.', 'mos_cpvs' ); ?></label>
-	<?php
-}
-function mos_cpvs_field_bootstrap_cb( $args ) {
-	global $mos_cpvs_options;
-	?>
-	<label for="<?php echo esc_attr( $args['label_for'] ); ?>"><input name="mos_cpvs_options[<?php echo esc_attr( $args['label_for'] ); ?>]" type="checkbox" id="<?php echo esc_attr( $args['label_for'] ); ?>" value="1" <?php echo isset( $mos_cpvs_options[ $args['label_for'] ] ) ? ( checked( $mos_cpvs_options[ $args['label_for'] ], 1, false ) ) : ( '' ); ?>><?php esc_html_e( 'Yes I like to add JQuery from Plugin.', 'mos_cpvs' ); ?></label>
-	<?php
-}
-function mos_cpvs_field_css_cb( $args ) {
-	global $mos_cpvs_options;
-	?>
-	<textarea name="mos_cpvs_options[<?php echo esc_attr( $args['label_for'] ); ?>]" id="<?php echo esc_attr( $args['label_for'] ); ?>" rows="10" class="regular-text"><?php echo isset( $mos_cpvs_options[ $args['label_for'] ] ) ? esc_html_e($mos_cpvs_options[$args['label_for']]) : '';?></textarea>
-	<?php
-}
+
 function mos_cpvs_section_end_cb( $args ) {
 	$data = get_mos_cpvs_active_tab ();
 	?>
