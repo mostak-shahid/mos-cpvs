@@ -39,6 +39,32 @@ function mos_cpvs_section_dash_start_cb( $args ) {
 	?>
 	<div id="mos-cpvs-dashboard" class="tab-con <?php if($data['active_tab'] == 'dashboard') echo 'active';?>">
 		<?php //var_dump($mos_cpvs_options) ?>
+		<table class="form-table" role="presentation">
+		    <tbody>
+		        <tr>
+		            <th scope="row">
+		                <label for="new_price">New Price</label>
+                    </th>
+		            <td>
+		                <select name="new_price" id="new_price">
+		                    <option value="min">Minimum</option>
+		                    <option value="max">Maxumum</option>
+		                    <option selected="selected" value="default">As Defined</option>
+		                </select>
+		            </td>
+		        </tr>
+		        <tr>
+		            <th scope="row">
+		                <label for="defined_price">Defined Price</label>
+		            </th>
+		            <td>
+                        <input name="defined_price" type="number" id="defined_price" aria-describedby="defined_price_description" value="0" class="regular-text ltr">
+		                <p class="description" id="defined_price_description">This address is used for admin purposes. If you change this, we will send you an email at your new address to confirm it. <strong>The new address will not become active until confirmed.</strong></p>
+		            </td>
+		        </tr>
+		    </tbody>
+		</table>
+		<p class="submit"><input type="button" id="change_all_at_once" class="button button-primary" value="Save Changes"></p>
 	<?php
 }
 function mos_cpvs_section_scripts_start_cb( $args ) {
