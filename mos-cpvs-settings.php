@@ -38,8 +38,30 @@ function mos_cpvs_section_dash_start_cb( $args ) {
   global $mos_cpvs_options;
 	?>
 	<div id="mos-cpvs-dashboard" class="tab-con <?php if($data['active_tab'] == 'dashboard') echo 'active';?>">
-		<?php var_dump($mos_cpvs_options) ?>
-
+		<?php //var_dump($mos_cpvs_options) ?>
+        <?php 
+            global $wpdb;
+            $allposts = $wpdb->get_results( "SELECT DISTINCT post_parent FROM {$wpdb->prefix}posts WHERE post_type='product_variation'");
+            foreach ($allposts as $key => $value) {            
+                $posts[] = $value->post_parent;            
+            }
+            var_dump($allposts);
+            $args = array(
+                'post_type' => 'product',
+                'post__in' => $posts,
+                'posts_per_page' => -1,
+                'post_status' => 'publish',
+            );
+            $output = [];
+            $query = new WP_Query( $args );
+            if ( $query->have_posts() ) {
+                while ( $query->have_posts() ) { $query->the_post();
+                    $output[get_the_ID()] = get_the_title();
+                }
+            }
+            wp_reset_postdata();    
+            var_dump($output);
+        ?>
 	<?php
 }
 function mos_cpvs_section_scripts_start_cb( $args ) {
