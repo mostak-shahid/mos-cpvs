@@ -107,7 +107,7 @@ function mos_cpvs_section_end_cb( $args ) {
 
 function mos_cpvs_options_page() {
 	//add_menu_page( 'WPOrg', 'WPOrg Options', 'manage_options', 'mos_cpvs', 'mos_cpvs_options_page_html' );
-	add_submenu_page( 'options-general.php', 'Settings', 'P Settings', 'manage_options', 'mos_cpvs_settings', 'mos_cpvs_admin_page' );
+	add_submenu_page( 'options-general.php', 'Settings', 'Variable to Simple', 'manage_options', 'mos_cpvs_settings', 'mos_cpvs_admin_page' );
 }
 add_action( 'admin_menu', 'mos_cpvs_options_page' );
 
