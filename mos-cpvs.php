@@ -24,14 +24,14 @@ $mos_cpvs_options = get_option( 'mos_cpvs_options' );
 $plugin = plugin_basename(MOS_CPVS_FILE); 
 require_once ( plugin_dir_path( MOS_CPVS_FILE ) . 'mos-cpvs-functions.php' );
 require_once ( plugin_dir_path( MOS_CPVS_FILE ) . 'mos-cpvs-settings.php' );
-//require_once ( plugin_dir_path( MOS_CPVS_FILE ) . 'custom-settings.php' );
+require_once ( plugin_dir_path( MOS_CPVS_FILE ) . 'hooks.php' );
 
-require_once('plugins/update/plugin-update-checker.php');
+/*require_once('plugins/update/plugin-update-checker.php');
 $pluginInit = Puc_v4_Factory::buildUpdateChecker(
 	'https://raw.githubusercontent.com/mostak-shahid/update/master/mos-cpvs.json',
 	MOS_CPVS_FILE,
 	'mos-cpvs'
-);
+);*/
 
 
 register_activation_hook(MOS_CPVS_FILE, 'mos_cpvs_activate');
