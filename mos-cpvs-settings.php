@@ -101,12 +101,14 @@ function mos_cpvs_section_scripts_start_cb( $args ) {
                 <?php while ( $query->have_posts() ) : $query->the_post(); ?>
 					<tr>
 					<td><?php echo get_the_title()?></td>
-					<td><select name="new_price" id="new_price">
-					<option value="min">Minimum</option>
-					<option value="max">Maxumum</option>
-					<option selected="selected" value="default">As Defined</option>
-				</select></td>
-					<td><input name="defined_price[<?php echo get_the_ID()?>]['defined_price']" type="text" id="defined_price_<?php echo get_the_ID()?>" value="0" class="regular-text ltr"></td>
+					<td>
+					<select name="products[<?php echo get_the_ID()?>][new_price]" id="new_price_<?php echo get_the_ID()?>">
+							<option value="min">Minimum</option>
+							<option value="max">Maxumum</option>
+							<option selected="selected" value="default">As Defined</option>
+						</select>
+					</td>
+					<td><input name="products[<?php echo get_the_ID()?>][defined_price]" type="text" id="defined_price_<?php echo get_the_ID()?>" value="0" class="regular-text ltr"></td>
 					</tr>
 				<?php endwhile; ?>
 				</table></tbody>
