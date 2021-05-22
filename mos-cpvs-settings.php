@@ -61,7 +61,7 @@ function mos_cpvs_section_dash_start_cb( $args ) {
 					</th>
 					<td>
 						<input name="defined_price" type="text" id="defined_price" aria-describedby="defined_price_description" value="0" class="regular-text ltr">
-						<p class="description" id="defined_price_description">This address is used for admin purposes. If you change this, we will send you an email at your new address to confirm it. <strong>The new address will not become active until confirmed.</strong></p>
+						<!-- <p class="description" id="defined_price_description">This address is used for admin purposes. If you change this, we will send you an email at your new address to confirm it. <strong>The new address will not become active until confirmed.</strong></p> -->
 					</td>
 				</tr>
 			</tbody>
@@ -80,7 +80,7 @@ function mos_cpvs_section_scripts_start_cb( $args ) {
             foreach ($allposts as $key => $value) {            
                 $posts[] = $value->post_parent;            
             }
-            var_dump($allposts);
+            //var_dump($allposts);
             $args = array(
                 'post_type' => 'product',
                 'post__in' => $posts,
@@ -89,13 +89,31 @@ function mos_cpvs_section_scripts_start_cb( $args ) {
             );
             $output = [];
             $query = new WP_Query( $args );
-            if ( $query->have_posts() ) {
-                while ( $query->have_posts() ) { $query->the_post();
-                    $output[get_the_ID()] = get_the_title();
-                }
-            }
+            if ( $query->have_posts() ) :
+				wp_nonce_field( 'change_one_by_one_products_action', 'change_one_by_one_products_field' )?>
+				<table class="form-table" role="presentation"><tbody>
+				<tr>
+				<th>Product Name</th>
+				<th>New Price</th>
+				<th>Defined Price</th>
+				</tr>
+				
+                <?php while ( $query->have_posts() ) : $query->the_post(); ?>
+					<tr>
+					<td><?php echo get_the_title()?></td>
+					<td><select name="new_price" id="new_price">
+					<option value="min">Minimum</option>
+					<option value="max">Maxumum</option>
+					<option selected="selected" value="default">As Defined</option>
+				</select></td>
+					<td><input name="defined_price[<?php echo get_the_ID()?>]['defined_price']" type="text" id="defined_price_<?php echo get_the_ID()?>" value="0" class="regular-text ltr"></td>
+					</tr>
+				<?php endwhile; ?>
+				</table></tbody>
+				<p class="submit"><input type="submit" id="change_one_by_one" class="button button-primary" value="Convert Products"></p>
+			<?php endif;
             wp_reset_postdata();    
-            var_dump($output);
+            //var_dump($output);
         ?>
 	<?php
 }
