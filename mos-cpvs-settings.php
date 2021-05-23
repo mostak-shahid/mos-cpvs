@@ -39,7 +39,7 @@ function mos_cpvs_section_dash_start_cb( $args ) {
 	?>
 	<div id="mos-cpvs-dashboard" class="tab-con <?php if($data['active_tab'] == 'dashboard') echo 'active';?>">
 		<?php //var_dump($mos_cpvs_options) ?>
-
+        <form method="post">
 		<?php wp_nonce_field( 'change_all_products_action', 'change_all_products_field' ); ?>
 		<table class="form-table" role="presentation">
 			<tbody>
@@ -49,9 +49,10 @@ function mos_cpvs_section_dash_start_cb( $args ) {
 					</th>
 					<td>
 						<select name="new_price" id="new_price">
+							<option value="">Select One</option>
 							<option value="min">Minimum</option>
 							<option value="max">Maxumum</option>
-							<option selected="selected" value="default">As Defined</option>
+							<option value="default">As Defined</option>
 						</select>
 					</td>
 				</tr>
@@ -66,8 +67,8 @@ function mos_cpvs_section_dash_start_cb( $args ) {
 				</tr>
 			</tbody>
 		</table>
-		<p class="submit"><input type="submit" id="change_all_at_once" class="button button-primary" value="Convert Products"></p>
-
+		<p class="submit"><button type="submit" id="change_all_at_once" class="button button-primary" name="mos-cpvs-submit" value="change_all_at_once">Convert Products</button></p>
+        </form>
 	<?php
 }
 function mos_cpvs_section_scripts_start_cb( $args ) {
@@ -80,41 +81,48 @@ function mos_cpvs_section_scripts_start_cb( $args ) {
             foreach ($allposts as $key => $value) {            
                 $posts[] = $value->post_parent;            
             }
-            //var_dump($allposts);
-            $args = array(
-                'post_type' => 'product',
-                'post__in' => $posts,
-                'posts_per_page' => -1,
-                'post_status' => 'publish',
-            );
-            $output = [];
-            $query = new WP_Query( $args );
-            if ( $query->have_posts() ) :
-				wp_nonce_field( 'change_one_by_one_products_action', 'change_one_by_one_products_field' )?>
-				<table class="form-table" role="presentation"><tbody>
-				<tr>
-				<th>Product Name</th>
-				<th>New Price</th>
-				<th>Defined Price</th>
-				</tr>
-				
-                <?php while ( $query->have_posts() ) : $query->the_post(); ?>
-					<tr>
-					<td><?php echo get_the_title()?></td>
-					<td>
-					<select name="products[<?php echo get_the_ID()?>][new_price]" id="new_price_<?php echo get_the_ID()?>">
-							<option value="min">Minimum</option>
-							<option value="max">Maxumum</option>
-							<option selected="selected" value="default">As Defined</option>
-						</select>
-					</td>
-					<td><input name="products[<?php echo get_the_ID()?>][defined_price]" type="text" id="defined_price_<?php echo get_the_ID()?>" value="0" class="regular-text ltr"></td>
-					</tr>
-				<?php endwhile; ?>
-				</table></tbody>
-				<p class="submit"><input type="submit" id="change_one_by_one" class="button button-primary" value="Convert Products"></p>
-			<?php endif;
-            wp_reset_postdata();    
+            if (@$posts && sizeof($posts)) {
+                $args = array(
+                    'post_type' => 'product',
+                    'post__in' => $posts,
+                    'posts_per_page' => -1,
+                    'post_status' => 'publish',
+                );
+                $output = [];
+                $query = new WP_Query( $args );
+                if ( $query->have_posts() ) :
+                    ?>
+                    <form method="post">
+                    <?php wp_nonce_field( 'change_one_by_one_products_action', 'change_one_by_one_products_field' )?>
+                    <table class="form-table" role="presentation"><tbody>
+                    <tr>
+                    <th>Product Name</th>
+                    <th>New Price</th>
+                    <th>Defined Price</th>
+                    </tr>
+
+                    <?php while ( $query->have_posts() ) : $query->the_post(); ?>
+                        <tr>
+                        <td><?php echo get_the_title()?></td>
+                        <td>
+                        <select name="products[<?php echo get_the_ID()?>][new_price]" id="new_price_<?php echo get_the_ID()?>">
+                                <option value="">Select One</option>
+                                <option value="min">Minimum</option>
+                                <option value="max">Maxumum</option>
+                                <option value="default">As Defined</option>
+                            </select>
+                        </td>
+                        <td><input name="products[<?php echo get_the_ID()?>][defined_price]" type="text" id="defined_price_<?php echo get_the_ID()?>" value="0" class="regular-text ltr"></td>
+                        </tr>
+                    <?php endwhile; ?>
+                    </tbody></table>
+                    <p class="submit"><button type="submit" id="change_one_by_one" class="button button-primary" name="mos-cpvs-submit" value="change_one_by_one">Convert Products</button></p>
+                    </form>
+                <?php endif;
+                wp_reset_postdata();
+            } else {
+                echo 'No data found';
+            }
             //var_dump($output);
         ?>
 	<?php
@@ -145,13 +153,13 @@ function mos_cpvs_admin_page() {
 	?>
 	<div class="wrap mos-cpvs-wrapper">
 		<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-		<form method="post">
+<!--		<form method="post">-->
 		<?php
 		settings_fields( 'mos_cpvs' );
 		do_settings_sections( 'mos_cpvs' );
 		//submit_button( 'Save Settings' );
 		?>
-		</form>
+<!--		</form>-->
 	</div>
 	<?php
 }
