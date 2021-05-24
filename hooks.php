@@ -4,21 +4,23 @@ function change_all_products() {
         var_dump($_POST);
     } 
 }
-add_action('init','change_one_by_one_products');
+//add_action('init','change_one_by_one_products');
 function change_one_by_one_products() {
-    var_dump($_POST);
+    //var_dump($_POST);
     
     global $woocommerce;
     global $wpdb;
-    /*if (isset( $_POST['change_all_products_field'] ) && wp_verify_nonce( $_POST['change_all_products_field'], 'change_all_products_action' )) {
+    $products = [];
+    if (isset( $_POST['change_all_products_field'] ) && wp_verify_nonce( $_POST['change_all_products_field'], 'change_all_products_action' )) {
         global $wpdb;
         $allposts = $wpdb->get_results( "SELECT DISTINCT post_parent FROM {$wpdb->prefix}posts WHERE post_type='product_variation'");
         foreach ($allposts as $key => $value) {            
-            $posts[] = $value->post_parent;            
+            $posts[$value->post_parent]['new_price'] = $_POST['new_price'];     
+            $posts[$value->post_parent]['defined_price'] = $_POST['defined_price'];         
         }
-        $products = $posts[];
+        $products = $posts;
         
-    }*/
+    }
     if (isset( $_POST['change_one_by_one_products_field'] ) && wp_verify_nonce( $_POST['change_one_by_one_products_field'], 'change_one_by_one_products_action' )) {
         $products = $_POST['products'];
     }
